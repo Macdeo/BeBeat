@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freemusic/configs/config_color.dart';
 import 'package:freemusic/configs/config_text.dart';
-import 'package:freemusic/configs/songlist.dart';
+import 'package:freemusic/models/songlist.dart';
 import 'package:freemusic/views/home.dart';
 import 'package:freemusic/widgets/searchBar.dart';
 import 'package:google_fonts/google_fonts.dart';

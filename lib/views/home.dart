@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:awesome_ripple_animation/awesome_ripple_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freemusic/configs/config_color.dart';
 import 'package:freemusic/configs/config_text.dart';
-import 'package:freemusic/configs/songlist.dart';
+import 'package:freemusic/models/songlist.dart';
 import 'package:freemusic/widgets/profileDrawer.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:freemusic/widgets/searchBar.dart';
@@ -125,17 +124,15 @@ class _HomeState extends State<Home> {
             });
           }
         });
-
     // Set initial audio source
     setAudio();
   }
 
   Future setAudio() async {
-    //Repeat song when completed
+    //Stop song when completed
     audioPlayer.setReleaseMode(ReleaseMode.stop);
 
-    String url = widget.songDetails?[3] ??
-        'https://cdn.trendybeatz.com/audio/Burna-Boy-City-Boys-(TrendyBeatz.com).mp3';
+    String url = widget.songDetails?[3] ?? songLists.listData[0][3];
     audioPlayer.setSourceUrl(url);
 
     Source source = UrlSource(url);

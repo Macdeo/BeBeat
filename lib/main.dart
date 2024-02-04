@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freemusic/configs/config_color.dart';
+import 'package:freemusic/models/songlist.dart';
+import 'package:provider/provider.dart';
 
 import 'controllers/homeController.dart';
 
@@ -13,13 +15,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BeBeat',
-      theme: ThemeData(
-        primaryColor: ConfigColor.primaryColor,
+    SongLists songLists = SongLists();
+
+    return Provider(
+      create: (_) => SongLists(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'BeBeat',
+        theme: ThemeData(
+          primaryColor: ConfigColor.primaryColor,
+        ),
+        home: const HomeController(),
       ),
-      home: const HomeController(),
     );
   }
 }
