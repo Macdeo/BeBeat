@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:freemusic/configs/config_color.dart';
 import 'package:freemusic/configs/config_text.dart';
+import 'package:freemusic/models/audio_provider.dart';
 import 'package:freemusic/models/songlist.dart';
 import 'package:freemusic/views/home.dart';
 import 'package:freemusic/widgets/searchBar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
 
 class SongList extends StatefulWidget {
   const SongList({super.key});
@@ -45,7 +48,7 @@ class _SongListState extends State<SongList> {
             separatorBuilder: (BuildContext context, int index) {
               return const Divider();
             },
-            itemCount: songLists.listData.length,
+            itemCount: context.read<AudioProvider>().songLists.length,
             padding: const EdgeInsets.all(10),
             itemBuilder: (context, index) {
               return InkWell(
@@ -54,7 +57,7 @@ class _SongListState extends State<SongList> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Home(
-                          songDetails: songLists.listData[index],
+                          songDetails: context.read<AudioProvider>().songLists[index],
                         ),
                       ), ModalRoute.withName('/'),);
                 },
@@ -62,11 +65,11 @@ class _SongListState extends State<SongList> {
                   leading: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                     child: Hero(
-                        tag: 'Song Image${songLists.listData[index][2]}',
-                        child: Image.network(songLists.listData[index][2])),
+                        tag: 'Song Image${context.read<AudioProvider>().songLists[index][2]}',
+                        child: Image.network(context.read<AudioProvider>().songLists[index][2])),
                   ),
                   title: Text(
-                    songLists.listData[index][0],
+                    context.read<AudioProvider>().songLists[index][0],
                     style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold),
                   ),
                   trailing: const Icon(
@@ -75,7 +78,7 @@ class _SongListState extends State<SongList> {
                     size: 26,
                   ),
                   subtitle: Text(
-                    songLists.listData[index][1],
+                    context.read<AudioProvider>().songLists[index][1],
                     style: GoogleFonts.ubuntu(),
                   ),
                 ),

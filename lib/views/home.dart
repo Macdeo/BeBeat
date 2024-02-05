@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freemusic/configs/config_color.dart';
 import 'package:freemusic/configs/config_text.dart';
+import 'package:freemusic/models/audio_provider.dart';
 import 'package:freemusic/models/songlist.dart';
 import 'package:freemusic/widgets/profileDrawer.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:freemusic/widgets/searchBar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:marquee/marquee.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   late List<String>? songDetails;
@@ -54,7 +56,14 @@ class _HomeState extends State<Home> {
     // Find the index by comparing the contents of the lists
     int index = -1;
     for (int i = 0; i < totalSongs; i++) {
-      if (songLists.listData[i].toString() == widget.songDetails!.toString()) {
+      if (widget.songDetails == null) {
+        if (songLists.listData[i].toString() ==
+            context.read<AudioProvider>().songLists[i].toString()) {
+          index = i;
+          break;
+        }
+      } else if (songLists.listData[i].toString() ==
+          widget.songDetails.toString()) {
         index = i;
         break;
       }
@@ -76,7 +85,15 @@ class _HomeState extends State<Home> {
     // Find the index by comparing the contents of the lists
     int index = -1;
     for (int i = 0; i < totalSongs; i++) {
-      if (songLists.listData[i].toString() == widget.songDetails!.toString()) {
+
+      if (widget.songDetails == null) {
+        if ((songLists.listData[i].toString() ==
+            context.read<AudioProvider>().songLists[i].toString())) {
+          index = i;
+          break;
+        }
+      } else if (songLists.listData[i].toString() ==
+          widget.songDetails.toString()) {
         index = i;
         break;
       }
@@ -91,20 +108,18 @@ class _HomeState extends State<Home> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
 
     // Listen to states: playing, paused, stopped
-    playerStateSubscription =
-        audioPlayer.onPlayerStateChanged.listen((state) {
-          if (mounted) {
-            setState(() {
-              isPlaying = state == PlayerState.playing;
-            });
-          }
+    playerStateSubscription = audioPlayer.onPlayerStateChanged.listen((state) {
+      if (mounted) {
+        setState(() {
+          isPlaying = state == PlayerState.playing;
         });
+      }
+    });
 
     // Listen to audio duration
     durationSubscription = audioPlayer.onDurationChanged.listen((newDuration) {
@@ -116,14 +131,13 @@ class _HomeState extends State<Home> {
     });
 
     // Listen to audio position
-    positionSubscription =
-        audioPlayer.onPositionChanged.listen((newPosition) {
-          if (mounted) {
-            setState(() {
-              position = newPosition;
-            });
-          }
+    positionSubscription = audioPlayer.onPositionChanged.listen((newPosition) {
+      if (mounted) {
+        setState(() {
+          position = newPosition;
         });
+      }
+    });
     // Set initial audio source
     setAudio();
   }
@@ -138,7 +152,6 @@ class _HomeState extends State<Home> {
     Source source = UrlSource(url);
     audioPlayer.play(source);
     showToast();
-
   }
 
   void showToast() {
@@ -224,8 +237,7 @@ class _HomeState extends State<Home> {
                           BlendMode.saturation,
                         ),
                         child: ImageFiltered(
-                            imageFilter:
-                                ImageFilter.blur(sigmaX: 5, sigmaY: 6),
+                            imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 6),
                             child: musicImage),
                       )),
                 ),
@@ -241,7 +253,8 @@ class _HomeState extends State<Home> {
                   child: ClipRRect(
                       borderRadius:
                           const BorderRadius.all(Radius.circular(15.0)),
-                      child: Hero(tag: 'Song Image${widget.songDetails?[2]}',
+                      child: Hero(
+                          tag: 'Song Image${widget.songDetails?[2]}',
                           child: musicImage)),
                 )
               ],
@@ -344,8 +357,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 75.0),
+              padding: const EdgeInsets.symmetric(horizontal: 75.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -405,7 +417,6 @@ class _HomeState extends State<Home> {
       onPressed: () async {
         if (isPlaying) {
           await audioPlayer.pause();
-
         } else {
           setAudio();
           await audioPlayer.resume();

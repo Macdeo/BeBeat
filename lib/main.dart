@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freemusic/configs/config_color.dart';
+import 'package:freemusic/models/audio_provider.dart';
 import 'package:freemusic/models/songlist.dart';
 import 'package:provider/provider.dart';
 
@@ -15,10 +16,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SongLists songLists = SongLists();
 
-    return Provider(
-      create: (_) => SongLists(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AudioProvider(),
+        )
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'BeBeat',

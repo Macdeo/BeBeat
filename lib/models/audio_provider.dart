@@ -1,17 +1,9 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:freemusic/models/songlist.dart';
 
 class AudioProvider extends ChangeNotifier {
-  AudioPlayer audioPlayer = AudioPlayer();
 
-  void stop() {
-    audioPlayer.stop();
-  }
+  List<List<String>> songLists = SongLists().listData;
 
-  void play(String url) {
-    audioPlayer.stop();
-    Source source = UrlSource(url);
-    audioPlayer.setSourceUrl(url);
-    audioPlayer.play(source);
-  }
+
 }
